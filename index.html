@@ -1,4 +1,4 @@
-<h1>Hello!3</h1>
+<h1>Hello!4</h1>
 <!DOCTYPE html>
 <meta charset="utf-8">
 
@@ -48,7 +48,7 @@ svg.append("g")
 
 // Add Y axis
 var y = d3.scaleLinear()
-  .domain([0, d3.max(grossIncomeByBranch, function(d) { return d.value; })])
+  .domain([(d3.min(grossIncomeByBranch, function(d) { return d.value; }) - 500), d3.max(grossIncomeByBranch, function(d) { return d.value; })])
   .range([ height, 0]);
 svg.append("g")
   .call(d3.axisLeft(y));
