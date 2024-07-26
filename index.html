@@ -1,4 +1,4 @@
-<h1>Hello!1</h1>
+<h1>Hello!2</h1>
 <!DOCTYPE html>
 <meta charset="utf-8">
 
@@ -36,7 +36,7 @@ var grossIncomeByBranch = d3.nest()
 // X axis
 var x = d3.scaleBand()
   .range([ 0, width ])
-  .domain(data.map(function(d) { return d['Branch'] }))
+  .domain(grossIncomeByBranch.map(function(d) { return d.key }))
   .padding(0.2);
     
 svg.append("g")
@@ -55,13 +55,13 @@ svg.append("g")
 
 // Bars
 svg.selectAll("mybar")
-  .data(data)
+  .data(grossIncomeByBranch)
   .enter()
   .append("rect")
-    .attr("x", -height)
-    .attr("y", -margin.left + 10)
+    .attr("x", x(d.key);)
+    .attr("y", y(d.value))
     .attr("width", x.bandwidth())
-    .attr("height", function(d) { return height - y(d.Rating); })
+    .attr("height", function(d) { return height - y(d.value); })
     .attr("fill", "#69b3a2")
 
 })
