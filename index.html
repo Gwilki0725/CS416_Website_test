@@ -36,6 +36,14 @@ var AvgGrossIncomeBoxChart = d3.select("#my_dataviz1")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+var AvgQuantitySoldChart = d3.select("#my_dataviz2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
 // Parse the Data
 d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/supermarket_sales%20-%20Sheet1.csv", function(data) {
 
@@ -93,17 +101,17 @@ topBarChart.selectAll("mybar")
     .entries(filteredData)
 
     var values = sumstat.map(d => d.value.mean);
-    var q1 = d3.quantile(values.sort(d3.ascending), 0.25);
-    var median = d3.quantile(values.sort(d3.ascending), 0.5);
-    var q3 = d3.quantile(values.sort(d3.ascending), 0.75);
-    var interQuantileRange = q3 - q1;
-    var min = q1 - 1.5 * interQuantileRange;
-    var max = q3 + 1.5 * interQuantileRange;
+    var q1IncomeBoxChart = d3.quantile(values.sort(d3.ascending), 0.25);
+    var medianIncomeBoxChart = d3.quantile(values.sort(d3.ascending), 0.5);
+    var q3IncomeBoxChart = d3.quantile(values.sort(d3.ascending), 0.75);
+    var interQuantileRangeIncomeBoxChart = q3IncomeBoxChart - q1IncomeBoxChart;
+    var minIncomeBoxChart = q1IncomeBoxChart - 1.5 * interQuantileRangeIncomeBoxChart;
+    var maxIncomeBoxChart = q3IncomeBoxChart + 1.5 * interQuantileRangeIncomeBoxChart;
         
     AvgGrossIncomeBoxChart.selectAll("*").remove();
         
   // Show the X scale
-  var x2 = d3.scaleBand()
+  var xIncomeBoxChart = d3.scaleBand()
     .range([ 0, width/3 ])
     .domain([branch])
     .paddingInner(1)
@@ -111,20 +119,20 @@ topBarChart.selectAll("mybar")
   
 AvgGrossIncomeBoxChart.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x2))
+    .call(d3.axisBottom(xIncomeBoxChart))
 
   // Show the Y scale
-  var y2 = d3.scaleLinear()
+  var yIncomeBoxChart = d3.scaleLinear()
     .domain([0, 30])
     .range([height, 0])
   
-    AvgGrossIncomeBoxChart.append("g").call(d3.axisLeft(y2))
+    AvgGrossIncomeBoxChart.append("g").call(d3.axisLeft(yIncomeBoxChart))
 
   // Show the main vertical line
 
     AvgGrossIncomeBoxChart.append("line")
-        .attr("x1", x2(branch))
-        .attr("x2", x2(branch))
+        .attr("x1", xIncomeBoxChart(branch))
+        .attr("x2", xIncomeBoxChart(branch))
         .attr("y1", 0)
         .attr("y2", height)
         .attr("stroke", "black")
@@ -132,18 +140,18 @@ AvgGrossIncomeBoxChart.append("g")
 
         var boxWidth = 100;
     AvgGrossIncomeBoxChart.append("rect")
-        .attr("x", x2(branch) - boxWidth / 2)
-        .attr("y", y2(q3))
-        .attr("height", y2(q1) - y2(q3))
+        .attr("x", xIncomeBoxChart(branch) - boxWidth / 2)
+        .attr("y", yIncomeBoxChart(q3IncomeBoxChart))
+        .attr("height", yIncomeBoxChart(q1IncomeBoxChart) - yIncomeBoxChart(q3IncomeBoxChart))
         .attr("width", boxWidth)
         .attr("stroke", "black")
         .style("fill", "#69b3a2");
 
     AvgGrossIncomeBoxChart.append("line")
-        .attr("x1", x2(branch) - boxWidth / 2)
-        .attr("x2", x2(branch) + boxWidth / 2)
-        .attr("y1", y2(median))
-        .attr("y2", y2(median))
+        .attr("x1", xIncomeBoxChart(branch) - boxWidth / 2)
+        .attr("x2", xIncomeBoxChart(branch) + boxWidth / 2)
+        .attr("y1", yIncomeBoxChart(medianIncomeBoxChart))
+        .attr("y2", yIncomeBoxChart(medianIncomeBoxChart))
         .attr("stroke", "black")
         .style("width", 80);
         
