@@ -71,17 +71,15 @@ svg.selectAll("mybar")
     .attr("height", function(d) { return height - y1(d.value); })
     .attr("fill", "#69b3a2")
     .on("click", function(event, d) { 
-        console.log(event);
-        console.log(d);
+        console.log(event.key);
         updateBoxPlot(event.key); });
 
     function updateBoxPlot(branch) {
-        console.log(branch);
     var filteredData = data.filter(function(d) { return d.Branch === branch; });
 
   // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
   var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-    .key(function(d) { return d.Branch;})
+    .key(function(d) { return d["Invoice ID"];})
     .rollup(function(d) {
       q1 = d3.quantile(d.map(function(g) { return g['gross income'];}).sort(d3.ascending),.25)
       median = d3.quantile(d.map(function(g) { return g['gross income'];}).sort(d3.ascending),.5)
