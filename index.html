@@ -373,7 +373,7 @@ bottomPlotChart.append("g")
 
 // Add Y axis
 var yBottomPlotChart = d3.scaleLinear()
-  .domain([(d3.min(sumOfDataBottomPlotChart, function(d) { return d.value; })), d3.max(sumOfDataBottomPlotChart, function(d) { return d.value; })])
+  .domain([0, d3.max(sumOfDataBottomPlotChart, function(d) { return d.value; })])
   .range([ height, 0]);
 
 bottomPlotChart.append("g")
