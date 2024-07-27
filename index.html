@@ -397,7 +397,7 @@ bottomPlotChart.append("g")
         .selectAll("text");
 
 var yBottomPlotChart = d3.scaleLinear()
-        .domain([0, d3.max(groupedData, function (d) {
+        .domain([0, d3.max(sumOfDataBottomPlotChart, function (d) {
                     return d3.max(d.values, function (d) {
                         return d.value;
                     });
@@ -412,7 +412,7 @@ bottomPlotChart.selectAll("g.layer")
                         obj[v.key] = v.value;
                     });
                     return obj[key] || 0;
-                })(groupedData))
+                })(sumOfDataBottomPlotChart))
         .enter().append("g")
         .attr("class", "layer")
         .attr("fill", function (d) {return threeColors(d.key);})
