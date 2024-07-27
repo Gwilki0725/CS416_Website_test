@@ -8,8 +8,8 @@
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 <div id="my_dataviz1"></div>
-<div id="my_dataviz1"></div>
-<div id="my_dataviz1"></div>
+<div id="my_dataviz2"></div>
+<div id="my_dataviz3"></div>
 
 <script>
 
@@ -20,7 +20,7 @@ var margin = {top: 30, right: 30, bottom: 70, left: 60},
     height = 400 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
+var topBarChart = d3.select("#my_dataviz")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -28,7 +28,7 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-    var svg2 = d3.select("#my_dataviz1")
+var svg2 = d3.select("#my_dataviz1")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -50,7 +50,7 @@ var x1 = d3.scaleBand()
   .domain(["A", "B", "C"])
   .padding(0.2);
     
-svg.append("g")
+topBarChart.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x1))
   .selectAll("text")
@@ -59,11 +59,12 @@ svg.append("g")
 var y1 = d3.scaleLinear()
   .domain([(d3.min(grossIncomeByBranch, function(d) { return d.value; }) - 500), d3.max(grossIncomeByBranch, function(d) { return d.value; })])
   .range([ height, 0]);
-svg.append("g")
+
+topBarChart.append("g")
   .call(d3.axisLeft(y1));
 
 // Bars
-svg.selectAll("mybar")
+topBarChart.selectAll("mybar")
   .data(grossIncomeByBranch)
   .enter()
   .append("rect")
