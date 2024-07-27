@@ -46,7 +46,7 @@ var topBarChart = d3.select("#my_dataviz")
 
 var AvgGrossIncomeBoxChart = d3.select("#my_dataviz1")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", width/3 + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
@@ -54,7 +54,7 @@ var AvgGrossIncomeBoxChart = d3.select("#my_dataviz1")
 
 var AvgQuantitySoldChart = d3.select("#my_dataviz2")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", width/3 + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
