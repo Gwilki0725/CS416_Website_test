@@ -73,7 +73,7 @@ svg.selectAll("mybar")
     .on("click", function(event, d) { 
         console.log(event);
         console.log(d);
-        updateBoxPlot(d.key); });
+        updateBoxPlot(event.key); });
 
     function updateBoxPlot(branch) {
         console.log(branch);
