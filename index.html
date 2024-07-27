@@ -174,10 +174,10 @@ AvgGrossIncomeBoxChart.append("g")
         //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
-  var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+  var sumstatQuantitySoldChart = d3.nest() // nest function allows to group the calculation per level of a factor
     .key(function(d) { return d["Invoice ID"];})
     .rollup(function(d) {
-          var values = d.map(g => +g['gross income']);
+          var values = d.map(g => +g['Quantity']);
             return {
                 mean: d3.mean(values),
                 stddev: d3.deviation(values)
@@ -185,7 +185,7 @@ AvgGrossIncomeBoxChart.append("g")
     })
     .entries(filteredData)
 
-    var values = sumstat.map(d => d.value.mean);
+    var values = sumstatQuantitySoldChart.map(d => d.value.mean);
     var q1QuantitySoldChart = d3.quantile(values.sort(d3.ascending), 0.25);
     var medianQuantitySoldChart = d3.quantile(values.sort(d3.ascending), 0.5);
     var q3QuantitySoldChart = d3.quantile(values.sort(d3.ascending), 0.75);
