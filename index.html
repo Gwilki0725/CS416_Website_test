@@ -70,8 +70,10 @@ svg.selectAll("mybar")
     .attr("width", x1.bandwidth())
     .attr("height", function(d) { return height - y1(d.value); })
     .attr("fill", "#69b3a2")
+    .on("click", function(event, d) { updateBoxPlot("A"); });
 
-var filteredData = data.filter(function(d) { return d.Branch === "A"; });
+    function updateBoxPlot(branch) {
+var filteredData = data.filter(function(d) { return d.Branch === branch; });
 
   // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
   var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
@@ -142,6 +144,7 @@ var filteredData = data.filter(function(d) { return d.Branch === "A"; });
       .attr("y2", function(d){return(y2(d.value.median))})
       .attr("stroke", "black")
       .style("width", 80)
+    }
 
 })
 
