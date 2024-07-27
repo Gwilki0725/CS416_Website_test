@@ -74,7 +74,7 @@ d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/sup
           .on("click", function(event, d) { updateBoxPlot("A"); });
 
       function updateBoxPlot(branch) {
-          var filteredData = data.filter(function(d) { return d.Branch === branch; });
+          var filteredData = data.filter(function(d) { return d.Branch === "A"; });
 
           // Compute quartiles, median, inter quantile range min and max
           var sumstat = d3.nest()
@@ -95,7 +95,7 @@ d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/sup
           // Show the X scale
           var x2 = d3.scaleBand()
             .range([0, width])
-            .domain([branch])
+            .domain(["A"])
             .paddingInner(1)
             .paddingOuter(.5);
 
