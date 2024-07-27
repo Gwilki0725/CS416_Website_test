@@ -37,42 +37,43 @@ var svg = d3.select("#my_dataviz")
 // Parse the Data
 d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/supermarket_sales%20-%20Sheet1.csv", function(data) {
 
-var grossIncomeByBranch = d3.nest()
-    .key(d => d.Branch)
-    .rollup(v => d3.sum(v, d => d['gross income']))
-    .entries(data);
-    
-// X axis
-var x1 = d3.scaleBand()
-  .range([ 0, width ])
-  .domain(grossIncomeByBranch.map(function(d) { return d.key }))
-  .padding(0.2);
-    
-svg.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x1))
-  .selectAll("text")
+      var grossIncomeByBranch = d3.nest()
+          .key(d => d.Branch)
+          .rollup(v => d3.sum(v, d => d['gross income']))
+          .entries(data);
 
-// Add Y axis
-var y1 = d3.scaleLinear()
-  .domain([(d3.min(grossIncomeByBranch, function(d) { return d.value; }) - 500), d3.max(grossIncomeByBranch, function(d) { return d.value; })])
-  .range([ height, 0]);
-svg.append("g")
-  .call(d3.axisLeft(y1));
+      // X axis
+      var x1 = d3.scaleBand()
+        .range([0, width])
+        .domain(grossIncomeByBranch.map(function(d) { return d.key; }))
+        .padding(0.2);
 
-// Bars
-svg.selectAll("mybar")
-  .data(grossIncomeByBranch)
-  .enter()
-  .append("rect")
-    .attr("x", function(d) { return x1(d.key); })
-    .attr("y", function(d) { return y1(d.value); })
-    .attr("width", x1.bandwidth())
-    .attr("height", function(d) { return height - y1(d.value); })
-    .attr("fill", "#69b3a2")
-    .on("click", function(event, d) { updateBoxPlot(d.key); });
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x1))
+        .selectAll("text");
 
-function updateBoxPlot(branch) {
+      // Add Y axis
+      var y1 = d3.scaleLinear()
+        .domain([0, d3.max(grossIncomeByBranch, function(d) { return d.value; })])
+        .range([height, 0]);
+
+      svg.append("g")
+        .call(d3.axisLeft(y1));
+
+      // Bars
+      svg.selectAll("mybar")
+        .data(grossIncomeByBranch)
+        .enter()
+        .append("rect")
+          .attr("x", function(d) { return x1(d.key); })
+          .attr("y", function(d) { return y1(d.value); })
+          .attr("width", x1.bandwidth())
+          .attr("height", function(d) { return height - y1(d.value); })
+          .attr("fill", "#69b3a2")
+          .on("click", function(event, d) { updateBoxPlot(d.key); });
+
+      function updateBoxPlot(branch) {
           var filteredData = data.filter(function(d) { return d.Branch === branch; });
 
           // Compute quartiles, median, inter quantile range min and max
@@ -136,16 +137,16 @@ function updateBoxPlot(branch) {
 
           // Show the median
           svg2.selectAll("medianLines")
-           .data(sumstat)
-           .enter()
-           .append("line")
-           .attr("x1", function(d) { return x2(d.key) - boxWidth / 2; })
-           .attr("x2", function(d) { return x2(d.key) + boxWidth / 2; })
-           .attr("y1", function(d) { return y2(d.value.median); })
-           .attr("y2", function(d) { return y2(d.value.median); })
-           .attr("stroke", "black")
-           .style("width", 80);
-    }
-});
+            .data(sumstat)
+            .enter()
+            .append("line")
+              .attr("x1", function(d) { return x2(d.key) - boxWidth / 2; })
+              .attr("x2", function(d) { return x2(d.key) + boxWidth / 2; })
+              .attr("y1", function(d) { return y2(d.value.median); })
+              .attr("y2", function(d) { return y2(d.value.median); })
+              .attr("stroke", "black")
+              .style("width", 80);
+      }
+    });
 
 </script>
