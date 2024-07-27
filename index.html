@@ -154,6 +154,75 @@ AvgGrossIncomeBoxChart.append("g")
         .attr("y2", yIncomeBoxChart(medianIncomeBoxChart))
         .attr("stroke", "black")
         .style("width", 80);
+
+        //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+
+        // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
+  var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+    .key(function(d) { return d["Invoice ID"];})
+    .rollup(function(d) {
+          var values = d.map(g => +g['gross income']);
+            return {
+                mean: d3.mean(values),
+                stddev: d3.deviation(values)
+            };
+    })
+    .entries(filteredData)
+
+    var values = sumstat.map(d => d.value.mean);
+    var q1QuantitySoldChart = d3.quantile(values.sort(d3.ascending), 0.25);
+    var medianQuantitySoldChart = d3.quantile(values.sort(d3.ascending), 0.5);
+    var q3QuantitySoldChart = d3.quantile(values.sort(d3.ascending), 0.75);
+    var interQuantileRangeQuantitySoldChart = q3QuantitySoldChart - q1QuantitySoldChart;
+    var minQuantitySoldChart = q1QuantitySoldChart - 1.5 * interQuantileRangeQuantitySoldChart;
+    var maxQuantitySoldChart = q3QuantitySoldChart + 1.5 * interQuantileRangeQuantitySoldChart;
+        
+    AvgQuantitySoldChart.selectAll("*").remove();
+        
+  // Show the X scale
+  var xQuantitySoldChart = d3.scaleBand()
+    .range([ 0, width/3 ])
+    .domain([branch])
+    .paddingInner(1)
+    .paddingOuter(.5)
+  
+AvgQuantitySoldChart.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xQuantitySoldChart))
+
+  // Show the Y scale
+  var yQuantitySoldChart = d3.scaleLinear()
+    .domain([0, 30])
+    .range([height, 0])
+  
+    AvgQuantitySoldChart.append("g").call(d3.axisLeft(yQuantitySoldChart))
+
+  // Show the main vertical line
+
+    AvgQuantitySoldChart.append("line")
+        .attr("x1", xQuantitySoldChart(branch))
+        .attr("x2", xQuantitySoldChart(branch))
+        .attr("y1", 0)
+        .attr("y2", height)
+        .attr("stroke", "black")
+        .style("width", 40);
+
+        var boxWidth = 100;
+    AvgQuantitySoldChart.append("rect")
+        .attr("x", xQuantitySoldChart(branch) - boxWidth / 2)
+        .attr("y", yQuantitySoldChart(q3QuantitySoldChart))
+        .attr("height", yQuantitySoldChart(q1QuantitySoldChart) - yQuantitySoldChart(q3QuantitySoldChart))
+        .attr("width", boxWidth)
+        .attr("stroke", "black")
+        .style("fill", "#69b3a2");
+
+    AvgQuantitySoldChart.append("line")
+        .attr("x1", xQuantitySoldChart(branch) - boxWidth / 2)
+        .attr("x2", xQuantitySoldChart(branch) + boxWidth / 2)
+        .attr("y1", yQuantitySoldChart(medianQuantitySoldChart))
+        .attr("y2", yQuantitySoldChart(medianQuantitySoldChart))
+        .attr("stroke", "black")
+        .style("width", 80);
         
     }
 
