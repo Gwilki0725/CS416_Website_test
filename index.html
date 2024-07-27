@@ -45,7 +45,7 @@ var grossIncomeByBranch = d3.nest()
 // X axis
 var x1 = d3.scaleBand()
   .range([ 0, width ])
-  .domain(grossIncomeByBranch.map(function(d) { return d.key }))
+  .domain(["A", "B", "C"])
   .padding(0.2);
     
 svg.append("g")
@@ -111,7 +111,7 @@ svg.selectAll("mybar")
 
   // Show the Y scale
   var y2 = d3.scaleLinear()
-    .domain([0, d3.max([max, d3.max(values)])])
+    .domain([0, 50])
     .range([height, 0])
   svg2.append("g").call(d3.axisLeft(y2))
 
