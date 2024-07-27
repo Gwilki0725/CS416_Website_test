@@ -128,6 +128,7 @@ topBarChart.selectAll("mybar")
         console.log(event.key);
         updateBoxPlot(event.key); });
 
+    updateBoxPlot("A");
     function updateBoxPlot(branch) {
     var filteredData = data.filter(function(d) { return d.Branch === branch; });
 
