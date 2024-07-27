@@ -367,7 +367,7 @@ AvgRatingChart.append("g")
     }
 
         //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-        updateChart('City');
+        updateChart('Branch');
 })
 function updateChart(key) {
         console.log(key);
@@ -378,7 +378,7 @@ function updateChart(key) {
 
 var sumOfDataBottomPlotChart = d3.nest()
     .key(d => d[key])
-    .rollup(v => d3.sum(v, d => d['gross income']))
+    .rollup(v => d3.sum(v, d => d['Rating']))
     .entries(data);
     
 // X axis
