@@ -356,7 +356,7 @@ AvgRatingChart.append("g")
     }
 //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 var sumOfDataBottomPlotChart = d3.nest()
-    .key(d => d['City'])
+    .key(d => d['Product line'])
     .rollup(v => d3.sum(v, d => d['gross income']))
     .entries(data);
     
