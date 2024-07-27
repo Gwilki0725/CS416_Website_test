@@ -53,33 +53,33 @@ var grossIncomeByBranch = d3.nest()
     .entries(data);
     
 // X axis
-var x1 = d3.scaleBand()
+var xTopBarChart = d3.scaleBand()
   .range([ 0, width ])
   .domain(["A", "B", "C"])
   .padding(0.2);
     
 topBarChart.append("g")
   .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x1))
+  .call(d3.axisBottom(xTopBarChart))
   .selectAll("text")
 
 // Add Y axis
-var y1 = d3.scaleLinear()
+var yTopBarChart = d3.scaleLinear()
   .domain([(d3.min(grossIncomeByBranch, function(d) { return d.value; }) - 500), d3.max(grossIncomeByBranch, function(d) { return d.value; })])
   .range([ height, 0]);
 
 topBarChart.append("g")
-  .call(d3.axisLeft(y1));
+  .call(d3.axisLeft(yTopBarChart));
 
 // Bars
 topBarChart.selectAll("mybar")
   .data(grossIncomeByBranch)
   .enter()
   .append("rect")
-    .attr("x", function(d) { return x1(d.key); })
-    .attr("y", function(d) { return y1(d.value); })
-    .attr("width", x1.bandwidth())
-    .attr("height", function(d) { return height - y1(d.value); })
+    .attr("x", function(d) { return xTopBarChart(d.key); })
+    .attr("y", function(d) { return yTopBarChart(d.value); })
+    .attr("width", xTopBarChart.bandwidth())
+    .attr("height", function(d) { return height - yTopBarChart(d.value); })
     .attr("fill", "#69b3a2")
     .on("click", function(event, d) { 
         console.log(event.key);
