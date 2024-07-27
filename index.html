@@ -384,6 +384,7 @@ var sumOfDataBottomPlotChart = d3.nest()
         .key(d => d['Branch'])
         .rollup(v => d3.sum(v, d => d['Rating']))
         .entries(data);
+                    console.log('Grouped data:', sumOfDataBottomPlotChart);
 
 var x0BottomPlotChart = d3.scaleBand()
         .range([0, width])
