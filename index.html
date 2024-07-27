@@ -362,6 +362,8 @@ AvgRatingChart.append("g")
 updateChart('City');
 function updateChart(key) {
         console.log(key);
+        bottomPlotChart.selectAll("*").remove();
+
 var sumOfDataBottomPlotChart = d3.nest()
     .key(d => d[key])
     .rollup(v => d3.sum(v, d => d['gross income']))
