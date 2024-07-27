@@ -146,6 +146,51 @@ topBarChart.selectAll("mybar")
         console.log(event.key);
         updateBoxPlot(event.key); });
 
+
+        //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+updateChart('City');
+function updateChart(key) {
+        console.log(key);
+        bottomPlotChart.selectAll("*").remove();
+
+var sumOfDataBottomPlotChart = d3.nest()
+    .key(d => d[key])
+    .rollup(v => d3.sum(v, d => d['gross income']))
+    .entries(data);
+    
+// X axis
+var xBottomPlotChart = d3.scaleBand()
+  .range([ 0, width ])
+  .domain(sumOfDataBottomPlotChart.map(d => d.key))
+  .padding(0.2);
+    
+bottomPlotChart.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(xBottomPlotChart))
+  .selectAll("text")
+
+// Add Y axis
+var yBottomPlotChart = d3.scaleLinear()
+  .domain([0, d3.max(sumOfDataBottomPlotChart, function(d) { return d.value; })])
+  .range([ height, 0]);
+
+bottomPlotChart.append("g")
+  .call(d3.axisLeft(yBottomPlotChart));
+
+// Bars
+bottomPlotChart.selectAll("mybar")
+  .data(sumOfDataBottomPlotChart)
+  .enter()
+  .append("rect")
+    .attr("x", function(d) { return xBottomPlotChart(d.key); })
+    .attr("y", function(d) { return yBottomPlotChart(d.value); })
+    .attr("width", xBottomPlotChart.bandwidth())
+    .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
+    .attr("fill", "#69b3a2")
+    .attr("stroke", "black") 
+    .attr("stroke-width", 1);
+}
+        
     updateBoxPlot("A");
     function updateBoxPlot(branch) {
     var filteredData = data.filter(function(d) { return d.Branch === branch; });
@@ -356,51 +401,6 @@ AvgRatingChart.append("g")
         .style("width", 80);
         
     }
-
-        
-//qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-updateChart('City');
-function updateChart(key) {
-        console.log(key);
-        bottomPlotChart.selectAll("*").remove();
-
-var sumOfDataBottomPlotChart = d3.nest()
-    .key(d => d[key])
-    .rollup(v => d3.sum(v, d => d['gross income']))
-    .entries(data);
-    
-// X axis
-var xBottomPlotChart = d3.scaleBand()
-  .range([ 0, width ])
-  .domain(sumOfDataBottomPlotChart.map(d => d.key))
-  .padding(0.2);
-    
-bottomPlotChart.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(xBottomPlotChart))
-  .selectAll("text")
-
-// Add Y axis
-var yBottomPlotChart = d3.scaleLinear()
-  .domain([0, d3.max(sumOfDataBottomPlotChart, function(d) { return d.value; })])
-  .range([ height, 0]);
-
-bottomPlotChart.append("g")
-  .call(d3.axisLeft(yBottomPlotChart));
-
-// Bars
-bottomPlotChart.selectAll("mybar")
-  .data(sumOfDataBottomPlotChart)
-  .enter()
-  .append("rect")
-    .attr("x", function(d) { return xBottomPlotChart(d.key); })
-    .attr("y", function(d) { return yBottomPlotChart(d.value); })
-    .attr("width", xBottomPlotChart.bandwidth())
-    .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
-    .attr("fill", "#69b3a2")
-    .attr("stroke", "black") 
-    .attr("stroke-width", 1);
-}
 
 })
 
