@@ -91,6 +91,7 @@ svg.selectAll("mybar")
     })
     .entries(filteredData)
 
+        svg2.selectAll("*").remove();
   // Show the X scale
   var x2 = d3.scaleBand()
     .range([ 0, width ])
