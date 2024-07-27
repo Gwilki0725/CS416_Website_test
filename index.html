@@ -91,10 +91,10 @@ svg.selectAll("mybar")
 
     svg2.selectAll("*").remove();
 
-    var mean = d3.mean(invoices, d => d.value.mean);
-    var stddev = d3.mean(invoices, d => d.value.stddev);
-    var min = d3.min(invoices, d => d.value.mean - d.value.stddev);
-    var max = d3.max(invoices, d => d.value.mean + d.value.stddev);
+    var mean = d3.mean(sumstat, d => d.value.mean);
+    var stddev = d3.mean(sumstat, d => d.value.stddev);
+    var min = d3.min(sumstat, d => d.value.mean - d.value.stddev);
+    var max = d3.max(sumstat, d => d.value.mean + d.value.stddev);
         
   // Show the X scale
   var x2 = d3.scaleBand()
