@@ -109,8 +109,11 @@ var bottomPlotChart = d3.select("#my_dataviz4")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-// Parse the Data
-d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/supermarket_sales%20-%20Sheet1.csv", function(data) {
+var threeColors = d3.scaleOrdinal()
+  .domain(["A", "B", "C"])
+  .range(["#69b3a2", "#4C9F70", "#377C4D"])
+
+        d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/supermarket_sales%20-%20Sheet1.csv", function(data) {
         
 var grossIncomeByBranch = d3.nest()
     .key(d => d.Branch)
@@ -145,7 +148,7 @@ topBarChart.selectAll("mybar")
     .attr("y", function(d) { return yTopBarChart(d.value); })
     .attr("width", xTopBarChart.bandwidth())
     .attr("height", function(d) { return height - yTopBarChart(d.value); })
-    .attr("fill", "#69b3a2")
+    .attr("fill", function(d) { return colorScale(d.key);)
     .attr("stroke", "black") 
     .attr("stroke-width", 1)  
     .on("click", function(event, d) { 
