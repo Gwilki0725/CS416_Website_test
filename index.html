@@ -219,7 +219,7 @@ AvgGrossIncomeBoxChart.append("g")
         .attr("height", yIncomeBoxChart(q1IncomeBoxChart) - yIncomeBoxChart(q3IncomeBoxChart))
         .attr("width", boxWidth)
         .attr("stroke", "black")
-        .style("fill", threeColors(key));
+        .style("fill", threeColors(branch));
 
     AvgGrossIncomeBoxChart.append("line")
         .attr("x1", xIncomeBoxChart(branch) - boxWidth / 2)
@@ -288,7 +288,7 @@ AvgQuantitySoldChart.append("g")
         .attr("height", yQuantitySoldChart(q1QuantitySoldChart) - yQuantitySoldChart(q3QuantitySoldChart))
         .attr("width", boxWidth)
         .attr("stroke", "black")
-        .style("fill", "#69b3a2");
+        .style("fill", threeColors(branch));
 
     AvgQuantitySoldChart.append("line")
         .attr("x1", xQuantitySoldChart(branch) - boxWidth / 2)
@@ -357,7 +357,7 @@ AvgRatingChart.append("g")
         .attr("height", yRatingChart(q1RatingChart) - yRatingChart(q3RatingChart))
         .attr("width", boxWidth)
         .attr("stroke", "black")
-        .style("fill", "#69b3a2");
+        .style("fill", threeColors(branch));
 
     AvgRatingChart.append("line")
         .attr("x1", xRatingChart(branch) - boxWidth / 2)
