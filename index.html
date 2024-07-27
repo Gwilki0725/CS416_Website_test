@@ -390,10 +390,7 @@ bottomPlotChart.selectAll("mybar")
     .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
     .attr("fill", "#69b3a2")
     .attr("stroke", "black") 
-    .attr("stroke-width", 1)  
-    .on("click", function(event, d) { 
-        console.log(event.key);
-        updateBoxPlot(event.key); });
+    .attr("stroke-width", 1);
 
 })
 
