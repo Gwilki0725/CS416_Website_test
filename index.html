@@ -73,7 +73,8 @@ svg.selectAll("mybar")
     .on("click", function(event, d) { updateBoxPlot(d.key); });
 
     function updateBoxPlot(branch) {
-var filteredData = data.filter(function(d) { return d.Branch === branch; });
+        console.log(branch);
+    var filteredData = data.filter(function(d) { return d.Branch === branch; });
 
   // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
   var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
@@ -101,7 +102,7 @@ var filteredData = data.filter(function(d) { return d.Branch === branch; });
 
   // Show the Y scale
   var y2 = d3.scaleLinear()
-    .domain([30,0])
+    .domain([0, d3.max(filteredData, function(d) { return d['gross income']; })])
     .range([height, 0])
   svg2.append("g").call(d3.axisLeft(y2))
 
