@@ -380,10 +380,10 @@ function updateChart(key) {
         
 
 var sumOfDataBottomPlotChart = d3.nest()
-            .key(d => d[key])
-            .key(d => d['Branch'])
-            .rollup(v => d3.sum(v, d => d['Rating']))
-            .entries(data);
+        .key(d => d[key])
+        .key(d => d['Branch'])
+        .rollup(v => d3.sum(v, d => d['Rating']))
+        .entries(data);
 
 var x0BottomPlotChart = d3.scaleBand()
         .range([0, width])
@@ -391,7 +391,7 @@ var x0BottomPlotChart = d3.scaleBand()
         .padding(0.2);
 
 var x1BottomPlotChart = d3.scaleBand()
-        .domain(['A', 'B', 'C'])
+        .domain(['A', 'B', 'C']) // Adjust domain based on your sub-keys
         .range([0, x0BottomPlotChart.bandwidth()])
         .padding(0.05);
 
@@ -399,26 +399,30 @@ bottomPlotChart.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x0BottomPlotChart));
 
-// Add Y axis
 var yBottomPlotChart = d3.scaleLinear()
-  .domain([0, d3.max(sumOfDataBottomPlotChart, function(d) { return d.value; })])
-  .range([ height, 0]);
+        .domain([0, d3.max(sumOfDataBottomPlotChart, function(d) { 
+                return d3.max(d.values, function(d) { return d.value; });
+        })])
+        .range([height, 0]);
 
-bottomPlotChart.append("g")
-  .call(d3.axisLeft(yBottomPlotChart));
+bottomPlotChart.append("g").call(d3.axisLeft(yBottomPlotChart));
 
-// Bars
-bottomPlotChart.selectAll("mybar")
-  .data(sumOfDataBottomPlotChart)
-  .enter()
-  .append("rect")
-    .attr("x", function(d) { return x1BottomPlotChart(d.key); })
-    .attr("y", function(d) { return yBottomPlotChart(d.value); })
-    .attr("width", x1BottomPlotChart.bandwidth())
-    .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
-    .attr("fill", "#69b3a2")
-    .attr("stroke", "black") 
-    .attr("stroke-width", 1);
+bottomPlotChart.selectAll("g")
+        .data(sumOfDataBottomPlotChart)
+        .enter()
+        .append("g")
+        .attr("transform", function(d) { return "translate(" + x0BottomPlotChart(d.key) + ",0)"; })
+        .selectAll("rect")
+        .data(function(d) { return d.values; })
+        .enter()
+        .append("rect")
+        .attr("x", function(d) { return x1BottomPlotChart(d.key); })
+        .attr("y", function(d) { return yBottomPlotChart(d.value); })
+        .attr("width", x1BottomPlotChart.bandwidth())
+        .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
+        .attr("fill", function(d) { return threeColors(d.key); })
+        .attr("stroke", "black")
+        .attr("stroke-width", 1);
 
         })}
 
