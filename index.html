@@ -102,7 +102,7 @@ function updateBoxPlot(branch) {
 
   // Show the Y scale
   var y2 = d3.scaleLinear()
-    .domain([30,0])
+    .domain([0, d3.max(filteredData, function(d) { return d['gross income']; })])
     .range([height, 0])
   svg2.append("g").call(d3.axisLeft(y2))
 
@@ -145,7 +145,7 @@ function updateBoxPlot(branch) {
       .attr("y2", function(d){return(y2(d.value.median))})
       .attr("stroke", "black")
       .style("width", 80)
-
+}
 })
 
 </script>
