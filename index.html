@@ -106,6 +106,8 @@ topBarChart.selectAll("mybar")
     .attr("width", xTopBarChart.bandwidth())
     .attr("height", function(d) { return height - yTopBarChart(d.value); })
     .attr("fill", "#69b3a2")
+        .attr("stroke", "black")
+        .style("width", 80);
     .on("click", function(event, d) { 
         console.log(event.key);
         updateBoxPlot(event.key); });
