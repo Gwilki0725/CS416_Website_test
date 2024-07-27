@@ -71,7 +71,7 @@ d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/sup
           .attr("width", x1.bandwidth())
           .attr("height", function(d) { return height - y1(d.value); })
           .attr("fill", "#69b3a2")
-          .on("click", function(event, d) { updateBoxPlot(d.key); });
+          .on("click", function(event, d) { updateBoxPlot("A"); });
 
       function updateBoxPlot(branch) {
           var filteredData = data.filter(function(d) { return d.Branch === branch; });
