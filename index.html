@@ -42,7 +42,7 @@ var AvgQuantitySoldChart = d3.select("#my_dataviz2")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+          "translate(" + margin.left + width  + "," + margin.top + height +  ")");
 
 // Parse the Data
 d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/supermarket_sales%20-%20Sheet1.csv", function(data) {
