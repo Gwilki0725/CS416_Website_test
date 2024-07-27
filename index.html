@@ -380,6 +380,7 @@ function updateChart(key) {
         
 var sumOfDataBottomPlotChart = d3.nest()
         .key(d => d[key])
+        .key(d => d.Branch)
         .rollup(v => d3.sum(v, d => d['Rating']))
         .entries(data);
                     console.log('Grouped data:', sumOfDataBottomPlotChart);
@@ -396,23 +397,34 @@ bottomPlotChart.append("g")
         .selectAll("text");
 
 var yBottomPlotChart = d3.scaleLinear()
-        .domain([0, d3.max(sumOfDataBottomPlotChart, function (d) {return d.value;})])
-        .range([height, 0]);
+        .domain([0, d3.max(groupedData, function (d) {
+                    return d3.max(d.values, function (d) {
+                        return d.value;
+                    });
+                })])
+                .range([height, 0]);
 
 bottomPlotChart.append("g").call(d3.axisLeft(yBottomPlotChart));
 
-bottomPlotChart.selectAll("mybar")
-        .data(sumOfDataBottomPlotChart)
-        .enter()
-        .append("rect")
-        .attr("x", function (d) {return xBottomPlotChart(d.key);})
-        .attr("y", function (d) {return yBottomPlotChart(d.value);})
-        .attr("width", xBottomPlotChart.bandwidth())
-        .attr("height", function (d) {return height - yBottomPlotChart(d.value);})
+bottomPlotChart.selectAll("g.layer")
+        .data(d3.stack().keys(["A", "B", "C"]).value((d, key) => { var obj = {};
+                    d.values.forEach(v => {
+                        obj[v.key] = v.value;
+                    });
+                    return obj[key] || 0;
+                })(groupedData))
+        .enter().append("g")
+        .attr("class", "layer")
         .attr("fill", function (d) {return threeColors(d.key);})
+        .selectAll("rect")
+        .data(function (d) {return d;})
+        .enter().append("rect")
+        .attr("x", function (d) {return xBottomPlotChart(d.data.key);})
+        .attr("y", function (d) {return yBottomPlotChart(d[1]);})
+        .attr("height", function (d) {return yBottomPlotChart(d[0]) - yBottomPlotChart(d[1]);})
+        .attr("width", xBottomPlotChart.bandwidth())
         .attr("stroke", "black")
         .attr("stroke-width", 1);
-
         })}
 
 </script>
