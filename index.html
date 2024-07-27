@@ -46,6 +46,8 @@
         </div>
     </div>
     <div class="row">
+        <button onclick="updateChart('City')">City</button>
+        <button onclick="updateChart('Branch')">Branch</button>
         <div class="col">
                 <p>TotalGrossIncome</p>
                 <div id="my_dataviz4"></div>
@@ -354,9 +356,14 @@ AvgRatingChart.append("g")
         .style("width", 80);
         
     }
+
+        
 //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+updateChart('City');
+function updateChart(key) {
+        
 var sumOfDataBottomPlotChart = d3.nest()
-    .key(d => d['Product line'])
+    .key(d => d[key])
     .rollup(v => d3.sum(v, d => d['gross income']))
     .entries(data);
     
@@ -391,6 +398,7 @@ bottomPlotChart.selectAll("mybar")
     .attr("fill", "#69b3a2")
     .attr("stroke", "black") 
     .attr("stroke-width", 1);
+}
 
 })
 
