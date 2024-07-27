@@ -253,7 +253,7 @@ AvgQuantitySoldChart.append("g")
 
         // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
   var sumstatRatingChart = d3.nest() // nest function allows to group the calculation per level of a factor
-    .key(function(d) { return d["Invoice ID"];})
+    .key(function(d) { return d["Rating"];})
     .rollup(function(d) {
           var values = d.map(g => +g['Quantity']);
             return {
