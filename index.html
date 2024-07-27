@@ -28,7 +28,7 @@ var topBarChart = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-var svg2 = d3.select("#my_dataviz1")
+var AvgGrossIncomeBoxChart = d3.select("#my_dataviz1")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -100,7 +100,7 @@ topBarChart.selectAll("mybar")
     var min = q1 - 1.5 * interQuantileRange;
     var max = q3 + 1.5 * interQuantileRange;
         
-    svg2.selectAll("*").remove();
+    AvgGrossIncomeBoxChart.selectAll("*").remove();
         
   // Show the X scale
   var x2 = d3.scaleBand()
@@ -108,7 +108,8 @@ topBarChart.selectAll("mybar")
     .domain([branch])
     .paddingInner(1)
     .paddingOuter(.5)
-  svg2.append("g")
+  
+AvgGrossIncomeBoxChart.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x2))
 
@@ -116,11 +117,12 @@ topBarChart.selectAll("mybar")
   var y2 = d3.scaleLinear()
     .domain([0, 30])
     .range([height, 0])
-  svg2.append("g").call(d3.axisLeft(y2))
+  
+    AvgGrossIncomeBoxChart.append("g").call(d3.axisLeft(y2))
 
   // Show the main vertical line
 
-    svg2.append("line")
+    AvgGrossIncomeBoxChart.append("line")
         .attr("x1", x2(branch))
         .attr("x2", x2(branch))
         .attr("y1", 0)
@@ -129,7 +131,7 @@ topBarChart.selectAll("mybar")
         .style("width", 40);
 
         var boxWidth = 100;
-    svg2.append("rect")
+    AvgGrossIncomeBoxChart.append("rect")
         .attr("x", x2(branch) - boxWidth / 2)
         .attr("y", y2(q3))
         .attr("height", y2(q1) - y2(q3))
@@ -137,7 +139,7 @@ topBarChart.selectAll("mybar")
         .attr("stroke", "black")
         .style("fill", "#69b3a2");
 
-    svg2.append("line")
+    AvgGrossIncomeBoxChart.append("line")
         .attr("x1", x2(branch) - boxWidth / 2)
         .attr("x2", x2(branch) + boxWidth / 2)
         .attr("y1", y2(median))
