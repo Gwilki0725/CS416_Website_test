@@ -48,7 +48,7 @@
     <div class="row">
         <div class="col">
                 <p>TotalGrossIncome</p>
-                <div id="my_dataviz"></div>
+                <div id="my_dataviz4"></div>
         </div>
     </div>
 </div>
@@ -92,6 +92,14 @@ var AvgRatingChart = d3.select("#my_dataviz3")
   .append("g")
     .attr("transform",
           "translate(" + margin.left  + "," + margin.top +  ")");
+
+var bottomPlotChart = d3.select("#my_dataviz4")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
 
 // Parse the Data
 d3.csv("https://raw.githubusercontent.com/Gwilki0725/CS416_Website_test/main/supermarket_sales%20-%20Sheet1.csv", function(data) {
@@ -346,6 +354,46 @@ AvgRatingChart.append("g")
         .style("width", 80);
         
     }
+//qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+var grossIncomeByBranch = d3.nest()
+    .key(d => d.Branch)
+    .rollup(v => d3.sum(v, d => d['gross income']))
+    .entries(data);
+    
+// X axis
+var xBottomPlotChart = d3.scaleBand()
+  .range([ 0, width ])
+  .domain(["A", "B", "C"])
+  .padding(0.2);
+    
+bottomPlotChart.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(xBottomPlotChart))
+  .selectAll("text")
+
+// Add Y axis
+var yBottomPlotChart = d3.scaleLinear()
+  .domain([(d3.min(grossIncomeByBranch, function(d) { return d.value; }) - 500), d3.max(grossIncomeByBranch, function(d) { return d.value; })])
+  .range([ height, 0]);
+
+bottomPlotChart.append("g")
+  .call(d3.axisLeft(yBottomPlotChart));
+
+// Bars
+bottomPlotChart.selectAll("mybar")
+  .data(grossIncomeByBranch)
+  .enter()
+  .append("rect")
+    .attr("x", function(d) { return xBottomPlotChart(d.key); })
+    .attr("y", function(d) { return yBottomPlotChart(d.value); })
+    .attr("width", xBottomPlotChart.bandwidth())
+    .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
+    .attr("fill", "#69b3a2")
+    .attr("stroke", "black") 
+    .attr("stroke-width", 1)  
+    .on("click", function(event, d) { 
+        console.log(event.key);
+        updateBoxPlot(event.key); });
 
 })
 
