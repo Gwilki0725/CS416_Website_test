@@ -25,6 +25,7 @@
     <div class="row">
         <div id="my_dataviz1"></div>
         <div id="my_dataviz2"></div>
+        <div id="my_dataviz3"></div>
     </div>
 </div>
 
@@ -46,7 +47,7 @@ var topBarChart = d3.select("#my_dataviz")
 
 var AvgGrossIncomeBoxChart = d3.select("#my_dataviz1")
   .append("svg")
-    .attr("width", width/3 + margin.left + margin.right)
+    .attr("width", width/4 + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
@@ -54,7 +55,15 @@ var AvgGrossIncomeBoxChart = d3.select("#my_dataviz1")
 
 var AvgQuantitySoldChart = d3.select("#my_dataviz2")
   .append("svg")
-    .attr("width", width/3 + margin.left + margin.right)
+    .attr("width", width/4 + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left  + "," + margin.top +  ")");
+
+var AvgRatingChart = d3.select("#my_dataviz3")
+  .append("svg")
+    .attr("width", width/4 + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform",
@@ -237,6 +246,75 @@ AvgQuantitySoldChart.append("g")
         .attr("x2", xQuantitySoldChart(branch) + boxWidth / 2)
         .attr("y1", yQuantitySoldChart(medianQuantitySoldChart))
         .attr("y2", yQuantitySoldChart(medianQuantitySoldChart))
+        .attr("stroke", "black")
+        .style("width", 80);
+
+            //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+
+        // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
+  var sumstatRatingChart = d3.nest() // nest function allows to group the calculation per level of a factor
+    .key(function(d) { return d["Invoice ID"];})
+    .rollup(function(d) {
+          var values = d.map(g => +g['Quantity']);
+            return {
+                mean: d3.mean(values),
+                stddev: d3.deviation(values)
+            };
+    })
+    .entries(filteredData)
+
+    var values = sumstatRatingChart.map(d => d.value.mean);
+    var q1RatingChart = d3.quantile(values.sort(d3.ascending), 0.25);
+    var medianRatingChart = d3.quantile(values.sort(d3.ascending), 0.5);
+    var q3RatingChart = d3.quantile(values.sort(d3.ascending), 0.75);
+    var interQuantileRangeRatingChart = q3RatingChart - q1RatingChart;
+    var minRatingChart = q1RatingChart - 1.5 * interQuantileRangeRatingChart;
+    var maxRatingChart = q3RatingChart + 1.5 * interQuantileRangeRatingChart;
+        
+    AvgRatingChart.selectAll("*").remove();
+        
+  // Show the X scale
+  var xRatingChart = d3.scaleBand()
+    .range([ 0, width/3 ])
+    .domain([branch])
+    .paddingInner(1)
+    .paddingOuter(.5)
+  
+AvgRatingChart.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xRatingChart))
+
+  // Show the Y scale
+  var yRatingChart = d3.scaleLinear()
+    .domain([0, 10])
+    .range([height, 0])
+  
+    AvgRatingChart.append("g").call(d3.axisLeft(yRatingChart))
+
+  // Show the main vertical line
+
+    AvgRatingChart.append("line")
+        .attr("x1", xRatingChart(branch))
+        .attr("x2", xRatingChart(branch))
+        .attr("y1", 0)
+        .attr("y2", height)
+        .attr("stroke", "black")
+        .style("width", 40);
+
+        var boxWidth = 100;
+    AvgRatingChart.append("rect")
+        .attr("x", xRatingChart(branch) - boxWidth / 2)
+        .attr("y", yRatingChart(q3RatingChart))
+        .attr("height", yRatingChart(q1RatingChart) - yRatingChart(q3RatingChart))
+        .attr("width", boxWidth)
+        .attr("stroke", "black")
+        .style("fill", "#69b3a2");
+
+    AvgRatingChart.append("line")
+        .attr("x1", xRatingChart(branch) - boxWidth / 2)
+        .attr("x2", xRatingChart(branch) + boxWidth / 2)
+        .attr("y1", yRatingChart(medianRatingChart))
+        .attr("y2", yRatingChart(medianRatingChart))
         .attr("stroke", "black")
         .style("width", 80);
         
