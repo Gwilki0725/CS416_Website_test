@@ -70,7 +70,10 @@ svg.selectAll("mybar")
     .attr("width", x1.bandwidth())
     .attr("height", function(d) { return height - y1(d.value); })
     .attr("fill", "#69b3a2")
-    .on("click", function(event, d) { updateBoxPlot(d.key); });
+    .on("click", function(event, d) { 
+        console.log(event);
+        console.log(d);
+        updateBoxPlot(d.key); });
 
     function updateBoxPlot(branch) {
         console.log(branch);
