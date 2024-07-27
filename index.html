@@ -380,20 +380,24 @@ function updateChart(key) {
         
 
 var sumOfDataBottomPlotChart = d3.nest()
-    .key(d => d[key])
-    .rollup(v => d3.sum(v, d => d['Rating']))
-    .entries(data);
-    
-// X axis
-var xBottomPlotChart = d3.scaleBand()
-  .range([ 0, width ])
-  .domain(sumOfDataBottomPlotChart.map(d => d.key))
-  .padding(0.2);
-    
+            .key(d => d[key])
+            .key(d => d['Branch'])
+            .rollup(v => d3.sum(v, d => d['Rating']))
+            .entries(data);
+
+var x0BottomPlotChart = d3.scaleBand()
+        .range([0, width])
+        .domain(sumOfDataBottomPlotChart.map(d => d.key))
+        .padding(0.2);
+
+var x1BottomPlotChart = d3.scaleBand()
+        .domain(['A', 'B', 'C'])
+        .range([0, x0BottomPlotChart.bandwidth()])
+        .padding(0.05);
+
 bottomPlotChart.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(xBottomPlotChart))
-  .selectAll("text")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x0BottomPlotChart));
 
 // Add Y axis
 var yBottomPlotChart = d3.scaleLinear()
@@ -408,7 +412,7 @@ bottomPlotChart.selectAll("mybar")
   .data(sumOfDataBottomPlotChart)
   .enter()
   .append("rect")
-    .attr("x", function(d) { return xBottomPlotChart(d.key); })
+    .attr("x", function(d) { return x1BottomPlotChart(d.key); })
     .attr("y", function(d) { return yBottomPlotChart(d.value); })
     .attr("width", xBottomPlotChart.bandwidth())
     .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
