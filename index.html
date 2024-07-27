@@ -81,13 +81,11 @@ svg.selectAll("mybar")
   var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
     .key(function(d) { return d["Invoice ID"];})
     .rollup(function(d) {
-      q1 = d3.quantile(d.map(function(g) { return g['gross income'];}).sort(d3.ascending),.25)
-      median = d3.quantile(d.map(function(g) { return g['gross income'];}).sort(d3.ascending),.5)
-      q3 = d3.quantile(d.map(function(g) { return g['gross income'];}).sort(d3.ascending),.75)
-      interQuantileRange = q3 - q1
-      min = q1 - 1.5 * interQuantileRange
-      max = q3 + 1.5 * interQuantileRange
-      return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+          var values = d.map(g => g['gross income']);
+            return {
+                mean: d3.mean(values),
+                stddev: d3.deviation(values)
+            };
     })
     .entries(filteredData)
 
@@ -121,32 +119,37 @@ svg.selectAll("mybar")
       .attr("stroke", "black")
       .style("width", 40)
 
-  // rectangle for the main box
-  var boxWidth = 100
-  svg2
-    .selectAll("boxes")
-    .data(sumstat)
-    .enter()
-    .append("rect")
-        .attr("x", function(d){return(x2(branch)-boxWidth/2)})
-        .attr("y", function(d){return(y2(d.value.q3))})
-        .attr("height", function(d){return(y2(d.value.q1)-y2(d.value.q3))})
-        .attr("width", boxWidth )
-        .attr("stroke", "black")
-        .style("fill", "#69b3a2")
+    var q1 = mean - stddev;
+    var q3 = mean + stddev;
+    var interQuantileRange = q3 - q1;
+    var min = q1 - 1.5 * interQuantileRange;
+    var max = q3 + 1.5 * interQuantileRange;
 
-  // Show the median
-  svg2
-    .selectAll("medianLines")
-    .data(sumstat)
-    .enter()
-    .append("line")
-      .attr("x1", function(d){return(x2(branch)-boxWidth/2) })
-      .attr("x2", function(d){return(x2(branch)+boxWidth/2) })
-      .attr("y1", function(d){return(y2(d.value.median))})
-      .attr("y2", function(d){return(y2(d.value.median))})
-      .attr("stroke", "black")
-      .style("width", 80)
+    svg2.append("line")
+        .attr("x1", x2(branch))
+        .attr("x2", x2(branch))
+        .attr("y1", y2(min))
+        .attr("y2", y2(max))
+        .attr("stroke", "black")
+        .style("width", 40);
+
+        var boxWidth = 100;
+    svg2.append("rect")
+        .attr("x", x2(branch) - boxWidth / 2)
+        .attr("y", y2(q3))
+        .attr("height", y2(q1) - y2(q3))
+        .attr("width", boxWidth)
+        .attr("stroke", "black")
+        .style("fill", "#69b3a2");
+
+    svg2.append("line")
+        .attr("x1", x2(branch) - boxWidth / 2)
+        .attr("x2", x2(branch) + boxWidth / 2)
+        .attr("y1", y2(mean))
+        .attr("y2", y2(mean))
+        .attr("stroke", "black")
+        .style("width", 80);
+        
     }
 
 })
