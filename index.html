@@ -355,15 +355,15 @@ AvgRatingChart.append("g")
         
     }
 //qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-var grossIncomeByBranch = d3.nest()
-    .key(d => d.Branch)
+var sumOfDataBottomPlotChart = d3.nest()
+    .key(d => d['City'])
     .rollup(v => d3.sum(v, d => d['gross income']))
     .entries(data);
     
 // X axis
 var xBottomPlotChart = d3.scaleBand()
   .range([ 0, width ])
-  .domain(["A", "B", "C"])
+  .domain(sumOfDataBottomPlotChart.map(d => d.key))
   .padding(0.2);
     
 bottomPlotChart.append("g")
@@ -381,7 +381,7 @@ bottomPlotChart.append("g")
 
 // Bars
 bottomPlotChart.selectAll("mybar")
-  .data(grossIncomeByBranch)
+  .data(sumOfDataBottomPlotChart)
   .enter()
   .append("rect")
     .attr("x", function(d) { return xBottomPlotChart(d.key); })
