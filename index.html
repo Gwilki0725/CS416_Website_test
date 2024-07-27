@@ -148,7 +148,7 @@ topBarChart.selectAll("mybar")
     .attr("y", function(d) { return yTopBarChart(d.value); })
     .attr("width", xTopBarChart.bandwidth())
     .attr("height", function(d) { return height - yTopBarChart(d.value); })
-    .attr("fill", function(d) { return colorScale(d.key);})
+    .attr("fill", function(d) { return threeColors(d.key);})
     .attr("stroke", "black") 
     .attr("stroke-width", 1)  
     .on("click", function(event, d) { 
