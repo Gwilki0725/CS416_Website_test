@@ -390,7 +390,11 @@ var xBottomPlotChart = d3.scaleBand()
         .domain(sumOfDataBottomPlotChart.map(d => d.key))
         .padding(0.2);
 
-
+var xSubSharts = d3.scaleBand()
+        .domain(["A", "B", "C"])
+        .range([0, xBottomPlotChart.bandwidth()])
+        .padding(0.05);
+                
 bottomPlotChart.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xBottomPlotChart))
@@ -407,24 +411,21 @@ var yBottomPlotChart = d3.scaleLinear()
 bottomPlotChart.append("g").call(d3.axisLeft(yBottomPlotChart));
 
 bottomPlotChart.selectAll("g.layer")
-        .data(d3.stack().keys(["A", "B", "C"]).value((d, key) => { var obj = {};
-                    d.values.forEach(v => {
-                        obj[v.key] = v.value;
-                    });
-                    return obj[key] || 0;
-                })(sumOfDataBottomPlotChart))
-        .enter().append("g")
-        .attr("class", "layer")
-        .attr("fill", function (d) {return threeColors(d.key);})
+        .data(sumOfDataBottomPlotChart)
+        .enter()
+        .append("g")
+        .attr("transform", function(d) { return "translate(" + xBottomPlotChart(d.key) + ",0)"; })
         .selectAll("rect")
-        .data(function (d) {return d;})
+        .data(function(d) { return d.values; })
         .enter().append("rect")
-        .attr("x", function (d) {return xBottomPlotChart(d.data.key);})
-        .attr("y", function (d) {return yBottomPlotChart(d[1]);})
-        .attr("height", function (d) {return yBottomPlotChart(d[0]) - yBottomPlotChart(d[1]);})
-        .attr("width", xBottomPlotChart.bandwidth())
+        .attr("x", function(d) { return xSubSharts(d.key); })
+        .attr("y", function(d) { return yBottomPlotChart(d.value); })
+        .attr("width", xSubgroup.bandwidth())
+        .attr("height", function(d) { return height - yBottomPlotChart(d.value); })
+        .attr("fill", function(d) { return color(d.key); })
         .attr("stroke", "black")
         .attr("stroke-width", 1);
+                
         })}
 
 </script>
