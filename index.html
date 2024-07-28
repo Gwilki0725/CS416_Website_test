@@ -380,7 +380,7 @@ function updateChart(key) {
 var sumOfDataBottomPlotChart = d3.nest()
         .key(d => d[key])
         .key(d => d.Branch)
-        .rollup(v => d3.sum(v, d => d['Rating']))
+        .rollup(v => d3.avg(v, d => d['Rating']))
         .entries(data);
                     console.log('Grouped data:', sumOfDataBottomPlotChart);
 
